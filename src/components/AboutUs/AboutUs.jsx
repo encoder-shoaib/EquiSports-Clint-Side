@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaTrophy, FaUsers, FaShieldAlt, FaShippingFast } from 'react-icons/fa';
 import Navbar from '../../RootComponents/Navbar/Navbar';
+import Footer from '../../RootComponents/Footer/Footer';
 
 const AboutUs = () => {
   const fadeIn = {
@@ -158,6 +159,7 @@ const AboutUs = () => {
           </motion.div>
         </div>
       </motion.div>
+      <Footer></Footer>
     </div>
   );
 };
