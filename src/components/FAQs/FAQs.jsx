@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaChevronDown, FaShippingFast, FaExchangeAlt, FaShieldAlt, FaCreditCard } from 'react-icons/fa';
 import Navbar from '../../RootComponents/Navbar/Navbar';
+import Footer from '../../RootComponents/Footer/Footer';
 
 const FAQs = () => {
   const fadeIn = {
@@ -178,6 +179,7 @@ const FAQs = () => {
           </motion.div>
         </div>
       </motion.div>
+      <Footer></Footer>
     </div>
   );
 };
