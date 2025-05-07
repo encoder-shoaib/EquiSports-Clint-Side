@@ -50,7 +50,10 @@ const MyEquipmentList = () => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(`http://localhost:5000/equipment/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            }
           });
 
           if (response.ok) {
@@ -87,8 +90,8 @@ const MyEquipmentList = () => {
         {/* Header with Search */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10">
           <div className="mb-6 md:mb-0">
-            <h1 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              My Equipment
+            <h1 className="text-3xl font-extrabold text-gray-900 sm:text-3xl sm:tracking-tight lg:text-4xl">
+              My<span className="text-[#8cc640]">Equipment</span>
             </h1>
             <p className="mt-2 text-gray-600">
               {filteredEquipments.length} {filteredEquipments.length === 1 ? 'item' : 'items'} found

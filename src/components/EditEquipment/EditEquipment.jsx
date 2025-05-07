@@ -1,21 +1,17 @@
-import { useContext, useState } from 'react';
-import { FaCheck, FaSpinner } from 'react-icons/fa';
-import toast, { Toaster } from 'react-hot-toast';
+import { useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FaCheck, FaSpinner, FaArrowLeft } from 'react-icons/fa';
+import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
-import { useLoaderData } from 'react-router-dom';
 import Navbar from '../../RootComponents/Navbar/Navbar';
 
-const AddEquipment = () => {
-  const loginUser = useLoaderData();
+const EditEquipment = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const currentUser = loginUser?.find(u => u.email === user?.email);
-
-  // Get user name from either:
-  // 1. currentUser (if available from loginUser data)
-  // 2. user.displayName (from AuthContext)
-  // 3. Fallback to empty string
-  const userName = currentUser?.name || user?.displayName || '';
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     image: '',
@@ -26,12 +22,8 @@ const AddEquipment = () => {
     rating: '',
     customization: '',
     processingTime: '',
-    stockStatus: '',
-    userEmail: user?.email || '',
-    userName: userName
+    stockStatus: ''
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
     'Cricket', 'Football', 'Basketball', 'Tennis',
@@ -43,6 +35,50 @@ const AddEquipment = () => {
     'Custom (specify in description)'
   ];
 
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:5000/equipment/${id}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch equipment');
+        }
+
+        const data = await response.json();
+
+        // Verify the equipment belongs to the current user
+        if (data.userEmail !== user?.email) {
+          toast.error('You can only edit your own equipment');
+          navigate('/my-equipment');
+          return;
+        }
+
+        setFormData({
+          image: data.image || '',
+          itemName: data.itemName || '',
+          categoryName: data.categoryName || '',
+          description: data.description || '',
+          price: data.price?.toString() || '',
+          rating: data.rating?.toString() || '',
+          customization: data.customization || '',
+          processingTime: data.processingTime || '',
+          stockStatus: data.stockStatus?.toString() || ''
+        });
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error(error.message || 'Failed to load equipment');
+        navigate('/my-equipment');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (user?.email) {
+      fetchEquipment();
+    }
+  }, [id, user, navigate]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -51,6 +87,13 @@ const AddEquipment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    // Validate required fields
+    if (!formData.itemName || !formData.categoryName || !formData.price || !formData.stockStatus) {
+      toast.error('Please fill all required fields');
+      setIsSubmitting(false);
+      return;
+    }
 
     const equipmentData = {
       image: formData.image,
@@ -61,64 +104,66 @@ const AddEquipment = () => {
       rating: formData.rating ? parseInt(formData.rating) : null,
       customization: formData.customization,
       processingTime: formData.processingTime,
-      stockStatus: parseInt(formData.stockStatus),
-      userEmail: user?.email || '',
-      userName: userName
+      stockStatus: parseInt(formData.stockStatus)
     };
 
     try {
-      const response = await fetch('http://localhost:5000/equipment', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:5000/equipment/${id}`, {
+        method: 'PUT',
         headers: {
-          'content-type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(equipmentData)
       });
 
-      const data = await response.json();
-
-      if (data.insertedId) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Equipment added successfully to the database!',
-          icon: 'success'
-        });
-
-        setFormData({
-          image: '',
-          itemName: '',
-          categoryName: '',
-          description: '',
-          price: '',
-          rating: '',
-          customization: '',
-          processingTime: '',
-          stockStatus: '',
-          userEmail: user?.email || '',
-          userName: userName
-        });
-      } else {
-        throw new Error('Failed to add equipment');
+      if (!response.ok) {
+        throw new Error('Failed to update equipment');
       }
+
+      const result = await response.json();
+
+      Swal.fire({
+        title: 'Success!',
+        text: 'Equipment updated successfully!',
+        icon: 'success',
+        confirmButtonColor: '#4f46e5',
+      }).then(() => {
+        navigate('/my-equipment');
+      });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Failed to add equipment. Please try again.');
+      console.error('Error:', error);
+      toast.error(error.message || 'Failed to update equipment');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center text-indigo-600 hover:text-indigo-800 mb-6 transition-colors"
+          >
+            <FaArrowLeft className="mr-2" /> Back to My Equipment
+          </button>
+
           <div className="text-center mb-10">
             <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-              Add New <span className="text-[#8cc640]">Equipment</span>
+              Edit <span className="text-[#8cc640]">Equipment</span>
             </h1>
             <p className="mt-3 text-lg text-gray-600">
-              Fill in the details to add a new product to the inventory
+              Update your equipment details below
             </p>
           </div>
 
@@ -130,7 +175,7 @@ const AddEquipment = () => {
                   {/* Image URL */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Image URL*
+                      Product Image URL
                     </label>
                     <input
                       type="url"
@@ -139,7 +184,6 @@ const AddEquipment = () => {
                       onChange={handleInputChange}
                       placeholder="https://example.com/image.jpg"
                       className="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
-                      required
                     />
                     {formData.image && (
                       <div className="mt-3">
@@ -180,7 +224,7 @@ const AddEquipment = () => {
                       name="categoryName"
                       value={formData.categoryName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 text-gray-500   border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
+                      className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                       required
                     >
                       <option value="">Select Category</option>
@@ -202,7 +246,9 @@ const AddEquipment = () => {
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
-                        className="w-full pl-8 pr-4 py-2 text-gray-500  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
+                        min="0"
+                        step="0.01"
+                        className="w-full pl-8 pr-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                         required
                       />
                     </div>
@@ -221,7 +267,7 @@ const AddEquipment = () => {
                       value={formData.description}
                       onChange={handleInputChange}
                       rows="4"
-                      className="w-full px-4 py-2 text-gray-500  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
+                      className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                       required
                     />
                   </div>
@@ -235,7 +281,7 @@ const AddEquipment = () => {
                       name="rating"
                       value={formData.rating}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 text-gray-500  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
+                      className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                     >
                       <option value="">Select Rating</option>
                       {[1, 2, 3, 4, 5].map(num => (
@@ -268,7 +314,7 @@ const AddEquipment = () => {
                       name="processingTime"
                       value={formData.processingTime}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 text-gray-500  border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
+                      className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                       required
                     >
                       <option value="">Select Processing Time</option>
@@ -288,37 +334,10 @@ const AddEquipment = () => {
                       name="stockStatus"
                       value={formData.stockStatus}
                       onChange={handleInputChange}
+                      min="0"
                       className="w-full px-4 py-2 text-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition duration-200"
                       required
                     />
-                  </div>
-
-                  {/* Read-only User Info */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Your Email
-                      </label>
-                      <input
-                        type="email"
-                        name="userEmail"
-                        value={formData.userEmail}
-                        readOnly
-                        className="w-full px-4 py-2 text-gray-500  border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed shadow-sm"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        name="userName"
-                        value={formData.userName}
-                        readOnly
-                        className="w-full px-4 py-2 text-gray-500  border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed shadow-sm"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -327,51 +346,39 @@ const AddEquipment = () => {
               <div className="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
                 <button
                   type="button"
-                  onClick={() => {
-                    setFormData({
-                      image: '',
-                      itemName: '',
-                      categoryName: '',
-                      description: '',
-                      price: '',
-                      rating: '',
-                      customization: '',
-                      processingTime: '',
-                      stockStatus: '',
-                      userEmail: user?.email || '',
-                      userName: userName
-                    });
-                  }}
+                  onClick={() => navigate('/my-equipment')}
                   className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition duration-200 shadow-sm"
                 >
-                  Reset Form
+                  Cancel
                 </button>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`px-6 py-3 text-white font-medium rounded-lg shadow-md transition duration-200 ${isSubmitting
-                    ? 'bg-blue-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
                     }`}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">
                       <FaSpinner className="animate-spin mr-2" />
-                      Processing...
+                      Updating...
                     </span>
                   ) : (
-                    'Add Equipment'
+                    <span className="flex items-center justify-center">
+                      <FaCheck className="mr-2" />
+                      Update Equipment
+                    </span>
                   )}
                 </button>
               </div>
             </form>
           </div>
         </div>
-        <Toaster position="top-right" />
       </div>
     </div>
   );
 };
 
-export default AddEquipment;
+export default EditEquipment;

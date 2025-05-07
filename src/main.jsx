@@ -16,6 +16,9 @@ import MyEquipmentList from './components/MyEquipmentList/MyEquipmentList';
 import AboutUs from './components/AboutUs/AboutUs';
 import Blog from './components/Blog/Blog';
 import FAQs from './components/FAQs/FAQs';
+import EquipmentDetails from './components/EquipmentDetails/EquipmentDetails';
+import TrendingProducts from './components/TrendingProducts/TrendingProducts';
+import EditEquipment from './components/EditEquipment/EditEquipment';
 
 
 const router = createBrowserRouter([
@@ -25,6 +28,7 @@ const router = createBrowserRouter([
     loader: () => fetch('http://localhost:5000/users'),
     errorElement: <ErrorPage></ErrorPage>,
   },
+
   {
     path: '/login',
     element: <Login></Login>,
@@ -36,6 +40,18 @@ const router = createBrowserRouter([
   {
     path: '/allSportEq',
     element: <AllSportsEq></AllSportsEq>,
+    loader: () => fetch('http://localhost:5000/equipment'),
+  },
+  {
+    path: '/equipment-details/:id',
+    element: <EquipmentDetails />,
+    loader: async ({ params }) => {
+      const response = await fetch(`http://localhost:5000/equipment/${params.id}`);
+      if (!response.ok) {
+        throw new Error('Equipment not found');
+      }
+      return response.json();
+    },
   },
   {
     path: '/add-equipment',
@@ -46,6 +62,11 @@ const router = createBrowserRouter([
     path: '/my-equipment',
     element: <MyEquipmentList></MyEquipmentList>,
   },
+  {
+    path: '/edit-equipment/:id',
+    element:<EditEquipment></EditEquipment>
+  },
+
   {
     path: '/aboutUs',
     element: <AboutUs></AboutUs>,

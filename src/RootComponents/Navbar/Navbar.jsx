@@ -131,7 +131,7 @@ const Navbar = ({ loginUser }) => {
                 <input
                   type="text"
                   placeholder="Search equipment..."
-                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 bg-gray-50  text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
                 />
                 <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
               </div>
