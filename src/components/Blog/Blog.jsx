@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaUser, FaTags } from 'react-icons/fa';
 import Navbar from '../../RootComponents/Navbar/Navbar';
+import Footer from '../../RootComponents/Footer/Footer';
 
 const Blog = () => {
   const stagger = {
@@ -203,6 +204,7 @@ const Blog = () => {
           </motion.div>
         </div>
       </motion.div>
+      <Footer></Footer>
     </div>
   );
 };
