@@ -65,7 +65,7 @@ const Blog = () => {
                       <FaCalendarAlt className="mr-1" /> June 15, 2023
                     </span>
                   </div>
-                  <h2 className="text-3xl font-bold mb-4">How to Choose the Perfect Cricket Bat</h2>
+                  <h2 className="text-3xl font-bold text-primary mb-4">How to Choose the Perfect Cricket Bat</h2>
                   <p className="text-gray-600 mb-6">
                     A comprehensive guide to selecting the right cricket bat based on your playing style, weight preferences, and budget considerations.
                   </p>
@@ -158,7 +158,7 @@ const Blog = () => {
                   <div className="flex items-center text-sm text-gray-500 mb-2">
                     <FaCalendarAlt className="mr-1" /> {post.date}
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+                  <h3 className="text-xl text-[#8cc640] font-bold mb-2">{post.title}</h3>
                   <p className="text-gray-600 mb-4">{post.excerpt}</p>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500 flex items-center">

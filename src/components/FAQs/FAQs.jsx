@@ -124,7 +124,7 @@ const FAQs = () => {
               >
                 <div className="flex items-center bg-gray-100 p-6">
                   {category.icon}
-                  <h2 className="text-2xl font-bold">{category.title}</h2>
+                  <h2 className="text-2xl text-[#8cc640] font-bold">{category.title}</h2>
                 </div>
                 <div className="divide-y divide-gray-200">
                   {category.questions.map((item, itemIndex) => (

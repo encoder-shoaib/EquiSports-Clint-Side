@@ -117,6 +117,18 @@ const Navbar = ({ loginUser }) => {
       >
         FAQs
       </NavLink>
+      <NavLink
+        to="/ContactUs"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
+            ? "bg-blue-600 text-white"
+            : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
+          }`
+        }
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        ContactUs
+      </NavLink>
     </>
   );
 

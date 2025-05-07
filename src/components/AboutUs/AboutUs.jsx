@@ -101,7 +101,7 @@ const AboutUs = () => {
                   className="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all"
                 >
                   {item.icon}
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <h3 className="text-xl  text-[#8cc640] font-bold mb-2">{item.title}</h3>
                   <p className="text-gray-600">{item.desc}</p>
                 </motion.div>
               ))}
@@ -148,7 +148,7 @@ const AboutUs = () => {
                     className="w-full h-64 object-cover"
                   />
                   <div className="p-6">
-                    <h3 className="text-xl font-bold">{member.name}</h3>
+                    <h3 className="text-xl text-primary font-bold">{member.name}</h3>
                     <p className="text-[#8cc640] font-medium mb-2">{member.role}</p>
                     <p className="text-gray-600">{member.bio}</p>
                   </div>

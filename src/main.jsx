@@ -20,6 +20,7 @@ import EquipmentDetails from './components/EquipmentDetails/EquipmentDetails';
 import TrendingProducts from './components/TrendingProducts/TrendingProducts';
 import EditEquipment from './components/EditEquipment/EditEquipment';
 import CategoryPage from './components/CategoryPage/CategoryPage';
+import ContactUs from './components/ContactUs/ContactUs';
 
 
 const router = createBrowserRouter([
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
   {
     path: '/FAQs',
     element: <FAQs></FAQs>,
+  },
+  {
+    path: '/ContactUs',
+    element: <ContactUs></ContactUs>,
   },
 ]);
 
