@@ -29,8 +29,8 @@ const EquipmentDetails = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
         <div className="text-center bg-white p-8 rounded-2xl shadow-xl max-w-md border border-indigo-200">
-          <h2 className="text-2xl font-bold text-indigo-900 mb-4">Equipment Not Found</h2>
-          <p className="text-indigo-600 mb-6">The requested equipment could not be found in our inventory.</p>
+          <h2 className="text-2xl font-bold text-black mb-4">Equipment Not Found</h2>
+          <p className="text-black mb-6">The requested equipment could not be found in our inventory.</p>
           <button
             onClick={() => navigate(-1)}
             className="px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center mx-auto shadow-md hover:shadow-lg"
@@ -44,19 +44,19 @@ const EquipmentDetails = () => {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex flex-col overflow-auto">
+    <div className="h-screen bg-white  flex flex-col overflow-auto">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-8 text-white shadow-lg">
+      <div className=" bg-gradient-to-r from-blue-50 to-purple-50 py-8 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-purple-100 hover:text-white mb-4 transition-colors duration-300"
+            className="flex items-center text-black duration-300"
           >
-            <FaArrowLeft className="mr-2" />
+            <FaArrowLeft className="mr-2 text-black" />
             Back to Equipment
           </button>
-          <h1 className="text-3xl font-extrabold text-yellow-300 mb-2 tracking-tight">{equipment.itemName}</h1>
-          <p className="text-lg text-purple-100">{equipment.categoryName} Equipment</p>
+          <h1 className="text-3xl font-extrabold text-[#8cc640] mb-2 tracking-tight">{equipment.itemName}</h1>
+          <p className="text-lg text-primary">{equipment.categoryName} Equipment</p>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ const EquipmentDetails = () => {
             <div className="md:w-1/2 p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-indigo-900">{equipment.itemName}</h2>
+                  <h2 className="text-2xl font-bold text-[#8cc640]">{equipment.itemName}</h2>
                   <p className="text-indigo-600 font-medium">{equipment.categoryName}</p>
                 </div>
                 <div

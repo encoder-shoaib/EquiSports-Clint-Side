@@ -7,8 +7,11 @@ import TrendingProducts from "../TrendingProducts/TrendingProducts";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Carousel data with working image URLs
+  // Carousel data
   const slides = [
     {
       id: 1,
@@ -60,11 +63,52 @@ const Home = () => {
     }
   ];
 
+  // Fetch equipment data
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/equipment");
+        if (!response.ok) {
+          throw new Error("Failed to fetch equipment data");
+        }
+        const data = await response.json();
+        // Extract unique categories
+        const uniqueCategories = [...new Set(data.map(item => item.categoryName))].map(category => ({
+          name: category,
+          image: data.find(item => item.categoryName === category).image || "https://via.placeholder.com/800x600", // Fallback image
+          link: `/equipment/${encodeURIComponent(category)}`, // Updated to match route
+          color: getCategoryColor(category)
+        }));
+        setCategories(uniqueCategories);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchEquipment();
+  }, []);
+
+  // Function to assign gradient colors to categories
+  const getCategoryColor = (category) => {
+    const colors = [
+      "bg-gradient-to-br from-green-500 to-green-700",
+      "bg-gradient-to-br from-amber-500 to-amber-700",
+      "bg-gradient-to-br from-orange-500 to-orange-700",
+      "bg-gradient-to-br from-blue-500 to-blue-700",
+      "bg-gradient-to-br from-red-500 to-red-700",
+      "bg-gradient-to-br from-emerald-500 to-emerald-700"
+    ];
+    const index = categories.length % colors.length;
+    return colors[index] || "bg-gradient-to-br from-purple-500 to-purple-700";
+  };
+
   // Auto-rotate slides
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [slides.length]);
@@ -85,10 +129,9 @@ const Home = () => {
   return (
     <div className="relative pb-6">
       {/* Hero Carousel */}
-      <div className=" bg-gray-200 py-2 ">
+      <div className="bg-gray-200 py-2">
         <div className="max-w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className=" relative h-[71vh] min-h-[500px] w-full overflow-hidden ">
-            {/* Slides */}
+          <div className="relative h-[71vh] min-h-[500px] w-full overflow-hidden">
             {slides.map((slide, index) => (
               <div
                 key={slide.id}
@@ -98,10 +141,9 @@ const Home = () => {
                   src={slide.image}
                   alt={slide.title}
                   className="w-full h-full object-cover rounded-xl"
-                  loading="eager" // Load first image immediately
+                  loading="eager"
                 />
-                {/* Overlay text and button */}
-                <div className="absolute inset-0  bg-opacity-30 flex items-center ">
+                <div className="absolute inset-0 bg-opacity-30 flex items-center">
                   <div className="container mx-auto px-6 lg:px-8">
                     <div className="max-w-2xl text-white">
                       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
@@ -121,11 +163,9 @@ const Home = () => {
                 </div>
               </div>
             ))}
-
-            {/* Navigation arrows */}
             <button
               onClick={goToPrevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black  bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition z-10"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition z-10"
               aria-label="Previous slide"
             >
               <svg
@@ -163,8 +203,6 @@ const Home = () => {
                 />
               </svg>
             </button>
-
-            {/* Slide indicators */}
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
               {slides.map((_, index) => (
                 <button
@@ -187,74 +225,44 @@ const Home = () => {
           </span>
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {[
-            {
-              name: "Football",
-              image: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=football",
-              color: "bg-gradient-to-br from-green-500 to-green-700"
-            },
-            {
-              name: "Cricket",
-              image: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=cricket",
-              color: "bg-gradient-to-br from-amber-500 to-amber-700"
-            },
-            {
-              name: "Basketball",
-              image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=basketball",
-              color: "bg-gradient-to-br from-orange-500 to-orange-700"
-            },
-            {
-              name: "Badminton",
-              image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=badminton",
-              color: "bg-gradient-to-br from-blue-500 to-blue-700"
-            },
-            {
-              name: "Fitness",
-              image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=fitness",
-              color: "bg-gradient-to-br from-red-500 to-red-700"
-            },
-            {
-              name: "Tennis",
-              image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&fit=crop",
-              link: "/equipment?category=tennis",
-              color: "bg-gradient-to-br from-emerald-500 to-emerald-700"
-            }
-          ].map((category) => (
-            <Link
-              to={category.link}
-              key={category.name}
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300"
-            >
-              <div className="relative h-64 w-full">
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className={`absolute inset-0 ${category.color} opacity-20`}></div>
-                <div className="absolute inset-0  bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
-                <h3 className="text-2xl font-bold text-white drop-shadow-lg">
-                  {category.name}
-                </h3>
-                <div className="mt-2">
-                  <span className="inline-block px-4 py-1 text-sm font-semibold text-white bg-black bg-opacity-40 rounded-full backdrop-blur-sm">
-                    Shop Now →
-                  </span>
+        {loading ? (
+          <p className="text-center text-gray-600">Loading categories...</p>
+        ) : error ? (
+          <p className="text-center text-red-600">Error: {error}</p>
+        ) : categories.length === 0 ? (
+          <p className="text-center text-gray-600">No categories available.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {categories.map((category) => (
+              <Link
+                to={category.link}
+                key={category.name}
+                className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300"
+              >
+                <div className="relative h-64 w-full">
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className={`absolute inset-0 ${category.color} opacity-20`}></div>
+                  <div className="absolute inset-0 bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
+                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                    {category.name}
+                  </h3>
+                  <div className="mt-2">
+                    <span className="inline-block px-4 py-1 text-sm font-semibold text-white bg-black bg-opacity-40 rounded-full backdrop-blur-sm">
+                      Shop Now →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Call to Action Section */}
@@ -283,18 +291,10 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Best Sellers / Trending Products Section */}
-      <TrendingProducts></TrendingProducts>
-
-      {/* Offers & Promotions Section */}
-      <OffersSection></OffersSection>
-
-      {/* Testimonials or Customer Reviews */}
-      <TestimonialsSection></TestimonialsSection>
-
-      {/*  Why Choose Us / Benefits Section */}
-      <BenefitsSection></BenefitsSection>
-
+      <TrendingProducts />
+      <OffersSection />
+      <TestimonialsSection />
+      <BenefitsSection />
     </div>
   );
 };

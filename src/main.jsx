@@ -19,6 +19,7 @@ import FAQs from './components/FAQs/FAQs';
 import EquipmentDetails from './components/EquipmentDetails/EquipmentDetails';
 import TrendingProducts from './components/TrendingProducts/TrendingProducts';
 import EditEquipment from './components/EditEquipment/EditEquipment';
+import CategoryPage from './components/CategoryPage/CategoryPage';
 
 
 const router = createBrowserRouter([
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
   {
     path: '/edit-equipment/:id',
     element:<EditEquipment></EditEquipment>
+  },
+  {
+    path: '/equipment/:categoryName',
+    element:<CategoryPage></CategoryPage>
   },
 
   {
