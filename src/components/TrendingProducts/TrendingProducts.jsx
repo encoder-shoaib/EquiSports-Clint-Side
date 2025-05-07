@@ -8,6 +8,7 @@ const TrendingProducts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -44,6 +45,9 @@ const TrendingProducts = () => {
 
   const handleViewDetails = (id) => {
     if (id) navigate(`/equipment-details/${id}`);
+  };
+  const handleNavigate = () => {
+    navigate('/allSportEq');
   };
 
   if (loading) {
@@ -173,7 +177,7 @@ const TrendingProducts = () => {
       {/* Additional content section */}
       <div className="mt-16 text-center">
         <div className="mt-12">
-          <button className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+          <button onClick={handleNavigate} className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
             View All Products
             <FaArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
           </button>

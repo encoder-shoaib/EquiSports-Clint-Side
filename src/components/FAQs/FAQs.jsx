@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaChevronDown, FaShippingFast, FaExchangeAlt, FaShieldAlt, FaCreditCard } from 'react-icons/fa';
+import Navbar from '../../RootComponents/Navbar/Navbar';
 
 const FAQs = () => {
   const fadeIn = {
@@ -83,98 +84,101 @@ const FAQs = () => {
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
-    >
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-            Frequently Asked <span className="text-[#8cc640]">Questions</span>
-          </h1>
-          <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
-            Find answers to common questions about our products and services
-          </p>
-        </motion.div>
+    <div>
+      <Navbar></Navbar>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            className="text-center mb-16"
+          >
+            <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+              Frequently Asked <span className="text-[#8cc640]">Questions</span>
+            </h1>
+            <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+              Find answers to common questions about our products and services
+            </p>
+          </motion.div>
 
-        {/* FAQ Categories */}
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="space-y-12"
-        >
-          {faqCategories.map((category, catIndex) => (
-            <motion.div
-              key={catIndex}
-              whileHover={{ scale: 1.01 }}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden"
-            >
-              <div className="flex items-center bg-gray-100 p-6">
-                {category.icon}
-                <h2 className="text-2xl font-bold">{category.title}</h2>
-              </div>
-              <div className="divide-y divide-gray-200">
-                {category.questions.map((item, itemIndex) => (
-                  <motion.div
-                    key={itemIndex}
-                    initial="hidden"
-                    whileInView="visible"
-                    variants={fadeIn}
-                    className="p-6"
-                  >
-                    <details className="group">
-                      <summary className="flex justify-between items-center cursor-pointer">
-                        <h3 className="text-lg font-medium text-gray-900">{item.question}</h3>
-                        <FaChevronDown className="text-[#8cc640] transform group-open:rotate-180 transition-transform" />
-                      </summary>
-                      <div className="mt-3 text-gray-600">
-                        <p>{item.answer}</p>
-                      </div>
-                    </details>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* FAQ Categories */}
+          <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="space-y-12"
+          >
+            {faqCategories.map((category, catIndex) => (
+              <motion.div
+                key={catIndex}
+                whileHover={{ scale: 1.01 }}
+                className="bg-white rounded-2xl shadow-xl overflow-hidden"
+              >
+                <div className="flex items-center bg-gray-100 p-6">
+                  {category.icon}
+                  <h2 className="text-2xl font-bold">{category.title}</h2>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {category.questions.map((item, itemIndex) => (
+                    <motion.div
+                      key={itemIndex}
+                      initial="hidden"
+                      whileInView="visible"
+                      variants={fadeIn}
+                      className="p-6"
+                    >
+                      <details className="group">
+                        <summary className="flex justify-between items-center cursor-pointer">
+                          <h3 className="text-lg font-medium text-gray-900">{item.question}</h3>
+                          <FaChevronDown className="text-[#8cc640] transform group-open:rotate-180 transition-transform" />
+                        </summary>
+                        <div className="mt-3 text-gray-600">
+                          <p>{item.answer}</p>
+                        </div>
+                      </details>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
 
-        {/* Contact CTA */}
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-20 bg-[#8cc640] rounded-2xl p-8 text-center text-white"
-        >
-          <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-          <p className="mb-6 max-w-2xl mx-auto">Our customer support team is available 24/7 to help you with any questions about our products or services.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+1234567890"
-              className="px-6 py-3 bg-white text-[#8cc640] font-medium rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Call Us Now
-            </a>
-            <a
-              href="mailto:support@equisports.com"
-              className="px-6 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-[#8cc640] transition-colors"
-            >
-              Email Us
-            </a>
-          </div>
-        </motion.div>
-      </div>
-    </motion.div>
+          {/* Contact CTA */}
+          <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-20 bg-[#8cc640] rounded-2xl p-8 text-center text-white"
+          >
+            <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
+            <p className="mb-6 max-w-2xl mx-auto">Our customer support team is available 24/7 to help you with any questions about our products or services.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="tel:+1234567890"
+                className="px-6 py-3 bg-white text-[#8cc640] font-medium rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Call Us Now
+              </a>
+              <a
+                href="mailto:support@equisports.com"
+                className="px-6 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-[#8cc640] transition-colors"
+              >
+                Email Us
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

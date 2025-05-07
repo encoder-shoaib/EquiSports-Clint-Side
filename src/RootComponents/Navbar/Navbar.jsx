@@ -52,6 +52,7 @@ const Navbar = ({ loginUser }) => {
       >
         All Sports Equipment
       </NavLink>
+
       {user && (
         <>
           <NavLink
@@ -78,44 +79,44 @@ const Navbar = ({ loginUser }) => {
           >
             My Equipment List
           </NavLink>
-          <NavLink
-            to="/aboutUs"
-            className={({ isActive }) =>
-              `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
-                ? "bg-blue-600 text-white"
-                : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
-              }`
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            AboutUs
-          </NavLink>
-          <NavLink
-            to="/blog"
-            className={({ isActive }) =>
-              `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
-                ? "bg-blue-600 text-white"
-                : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
-              }`
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Blog
-          </NavLink>
-          <NavLink
-            to="/FAQs"
-            className={({ isActive }) =>
-              `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
-                ? "bg-blue-600 text-white"
-                : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
-              }`
-            }
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            FAQs
-          </NavLink>
         </>
       )}
+      <NavLink
+        to="/aboutUs"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
+            ? "bg-blue-600 text-white"
+            : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
+          }`
+        }
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        AboutUs
+      </NavLink>
+      <NavLink
+        to="/blog"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
+            ? "bg-blue-600 text-white"
+            : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
+          }`
+        }
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        Blog
+      </NavLink>
+      <NavLink
+        to="/FAQs"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 ${isActive
+            ? "bg-blue-600 text-white"
+            : "text-gray-800 hover:bg-blue-100 hover:text-blue-600"
+          }`
+        }
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        FAQs
+      </NavLink>
     </>
   );
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaTrophy, FaUsers, FaShieldAlt, FaShippingFast } from 'react-icons/fa';
+import Navbar from '../../RootComponents/Navbar/Navbar';
 
 const AboutUs = () => {
   const fadeIn = {
@@ -9,6 +10,7 @@ const AboutUs = () => {
 
   return (
     <div>
+      <Navbar></Navbar>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
