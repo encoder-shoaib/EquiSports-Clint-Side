@@ -9,7 +9,8 @@ A full-stack sports equipment marketplace where users can list, browse, and mana
 
 ## Live Demo
 
-🔗 [https://equisports.vercel.app](https://equisports.vercel.app) (example link)
+🔗 [ https://equisports-f9098.web.app ]
+
 
 ## Features
 
